@@ -1,8 +1,6 @@
 CREATE TABLE `products` (
   `product_id` int PRIMARY KEY AUTO_INCREMENT,
   `dept_id` int,
-  `shelf_stock` int,
-  `back_stock` int,
   `productName` varchar(255)
 );
 
@@ -47,7 +45,7 @@ CREATE TABLE `inventory` (
   `product_id` int,
   `dept_id` int,
   `exp_date` datetime,
-  `location` varchar(255)
+  `location` ENUM ('back', 'shelf')
 );
 
 CREATE TABLE `managed_departments` (

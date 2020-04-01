@@ -1,7 +1,7 @@
 CREATE TABLE `products` (
   `product_id` int PRIMARY KEY AUTO_INCREMENT,
   `dept_id` int,
-  `productName` varchar(255)
+  `product_name` varchar(255)
 );
 
 CREATE TABLE `departments` (
@@ -22,40 +22,23 @@ CREATE TABLE `users` (
 
 CREATE TABLE `orders` (
   `order_id` int PRIMARY KEY AUTO_INCREMENT,
-  `order_date` datetime
-);
-
-CREATE TABLE `order_details` (
-  `order_id` int,
-  `inventory_id` int
+  `order_date` date
 );
 
 CREATE TABLE `sales` (
   `sale_id` int PRIMARY KEY AUTO_INCREMENT,
-  `sale_date` datetime
-);
-
-CREATE TABLE `sale_details` (
-  `sale_id` int,
-  `inventory_id` int
+  `sale_date` date
 );
 
 CREATE TABLE `inventory` (
   `inventory_id` int PRIMARY KEY AUTO_INCREMENT,
   `product_id` int,
   `dept_id` int,
-  `exp_date` datetime,
+  `order_id` int,
+  `sale_id` int,
+  `exp_date` date,
   `location` ENUM ('back', 'shelf')
 );
-
-CREATE TABLE `managed_departments` (
-  `user_id` int,
-  `dept_id` int
-);
-
-ALTER TABLE `managed_departments` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
-
-ALTER TABLE `managed_departments` ADD FOREIGN KEY (`dept_id`) REFERENCES `departments` (`dept_id`);
 
 ALTER TABLE `products` ADD FOREIGN KEY (`dept_id`) REFERENCES `departments` (`dept_id`);
 
@@ -63,14 +46,10 @@ ALTER TABLE `departments` ADD FOREIGN KEY (`dept_mngr`) REFERENCES `users` (`use
 
 ALTER TABLE `users` ADD FOREIGN KEY (`dept_id`) REFERENCES `departments` (`dept_id`);
 
-ALTER TABLE `order_details` ADD FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`);
-
-ALTER TABLE `order_details` ADD FOREIGN KEY (`inventory_id`) REFERENCES `inventory` (`inventory_id`);
-
-ALTER TABLE `sale_details` ADD FOREIGN KEY (`sale_id`) REFERENCES `sales` (`sale_id`);
-
-ALTER TABLE `sale_details` ADD FOREIGN KEY (`inventory_id`) REFERENCES `inventory` (`inventory_id`);
-
 ALTER TABLE `inventory` ADD FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`);
 
 ALTER TABLE `inventory` ADD FOREIGN KEY (`dept_id`) REFERENCES `departments` (`dept_id`);
+
+ALTER TABLE `inventory` ADD FOREIGN KEY (`sale_id`) REFERENCES `sales` (`sale_id`);
+
+ALTER TABLE `inventory` ADD FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`);

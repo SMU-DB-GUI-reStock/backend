@@ -58,18 +58,6 @@ ALTER TABLE inventory ADD FOREIGN KEY (sale_id) REFERENCES sales (sale_id);
 
 ALTER TABLE inventory ADD FOREIGN KEY (order_id) REFERENCES orders (order_id);
 
--- create user called manager with password Password
-CREATE USER 'manager'@'%' IDENTIFIED BY 'Password';
-
--- give access to manager on db
-GRANT ALL PRIVILEGES ON db.* TO 'manager'@'%';
-
--- set password method to native password for mysql workbench access (mysql 8 issue)
-ALTER USER 'manager'@'%' IDENTIFIED WITH MYSQL_NATIVE_PASSWORD BY 'Password';
-
--- flush them privileges
-FLUSH PRIVILEGES;
-
 INSERT INTO users (type, email, password, first, last)
   VALUES
   ('base_user', 'abrooks@restock.com',   'password', 'Alice',  'Brooks'  ),

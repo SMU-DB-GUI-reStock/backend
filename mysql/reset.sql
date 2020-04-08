@@ -1,11 +1,12 @@
 use db;
 
-DROP TABLE IF EXISTS products, departments, users, orders, order_details, sales, sale_details, inventory, managed_departments;
+DROP TABLE IF EXISTS product_types, departments, users, orders, order_details, sales, sale_details, products, managed_departments;
 
-CREATE TABLE products (
-  product_id int PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE product_types (
+  product_type_id int PRIMARY KEY AUTO_INCREMENT,
   dept_id int,
-  product_name varchar(255)
+  price int,
+  product_type_name varchar(255)
 );
 
 CREATE TABLE departments (
@@ -34,9 +35,9 @@ CREATE TABLE sales (
   sale_date date
 );
 
-CREATE TABLE inventory (
-  inventory_id int PRIMARY KEY AUTO_INCREMENT,
-  product_id int,
+CREATE TABLE products (
+  product_id int PRIMARY KEY AUTO_INCREMENT,
+  product_type_id int,
   dept_id int,
   order_id int,
   sale_id int,
@@ -44,19 +45,19 @@ CREATE TABLE inventory (
   location ENUM ('back', 'shelf')
 );
 
-ALTER TABLE products ADD FOREIGN KEY (dept_id) REFERENCES departments (dept_id);
+ALTER TABLE product_types ADD FOREIGN KEY (dept_id) REFERENCES departments (dept_id);
 
 ALTER TABLE departments ADD FOREIGN KEY (dept_mngr) REFERENCES users (user_id);
 
 ALTER TABLE users ADD FOREIGN KEY (dept_id) REFERENCES departments (dept_id);
 
-ALTER TABLE inventory ADD FOREIGN KEY (product_id) REFERENCES products (product_id);
+ALTER TABLE products ADD FOREIGN KEY (product_type_id) REFERENCES product_types (product_type_id);
 
-ALTER TABLE inventory ADD FOREIGN KEY (dept_id) REFERENCES departments (dept_id);
+ALTER TABLE products ADD FOREIGN KEY (dept_id) REFERENCES departments (dept_id);
 
-ALTER TABLE inventory ADD FOREIGN KEY (sale_id) REFERENCES sales (sale_id);
+ALTER TABLE products ADD FOREIGN KEY (sale_id) REFERENCES sales (sale_id);
 
-ALTER TABLE inventory ADD FOREIGN KEY (order_id) REFERENCES orders (order_id);
+ALTER TABLE products ADD FOREIGN KEY (order_id) REFERENCES orders (order_id);
 
 INSERT INTO users (type, email, password, first, last)
   VALUES
@@ -86,24 +87,23 @@ UPDATE users SET dept_id = 2 WHERE user_id = 7;
 UPDATE users SET dept_id = 2 WHERE user_id = 8;
 UPDATE users SET dept_id = 3 WHERE user_id = 9;
 
-INSERT INTO products (dept_id, product_name)
+INSERT INTO product_types (dept_id, product_type_name, price)
   VALUES
-  (1, 'Cheese'         ),
-  (1, 'Milk'           ),
-  (1, 'Butter'         ),
-  (1, 'Yogurt'         ),
-  (1, 'Shredded Cheese'),
-  (2, 'Steak'          ),
-  (2, 'Chicken'        ),
-  (2, 'Pork'           ),
-  (2, 'Ground Beef'    ),
-  (2, 'Turkey'         ),
-  (3, 'Shrimp'         ),
-  (3, 'Lobster'        ),
-  (3, 'Salmon'         ),
-  (3, 'Halibut'        ),
-  (3, 'Sea Bass'       );
-
+  (1, 'Cheese'         , 5),
+  (1, 'Milk'           , 5),
+  (1, 'Butter'         , 5),
+  (1, 'Yogurt'         , 5),
+  (1, 'Shredded Cheese', 5),
+  (2, 'Steak'          , 5),
+  (2, 'Chicken'        , 5),
+  (2, 'Pork'           , 5),
+  (2, 'Ground Beef'    , 5),
+  (2, 'Turkey'         , 5),
+  (3, 'Shrimp'         , 5),
+  (3, 'Lobster'        , 5),
+  (3, 'Salmon'         , 5),
+  (3, 'Halibut'        , 5),
+  (3, 'Sea Bass'       , 5);
 INSERT INTO orders (order_date)
   VALUES
   ('2020-03-29'),
@@ -113,7 +113,7 @@ INSERT INTO orders (order_date)
   ('2020-03-31'),
   ('2020-03-31');
 
-INSERT INTO inventory (product_id, dept_id, order_id, exp_date, location)
+INSERT INTO products (product_type_id, dept_id, order_id, exp_date, location)
   VALUES
   ( 1, 1, 3, '2020-04-14', 'shelf'),
   ( 2, 1, 4, '2020-04-14', 'shelf'),

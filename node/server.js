@@ -44,6 +44,39 @@ app.get('/', (req, res) => {
   res.status(200).send('Go to 0.0.0.0:3000.');
 });
 
+//GET /products
+//GET /product_types
+//GET /departments
+//GET /orders
+//GET /saless
+//GET /users
+//GET /products/{id}
+//GET /product_types/{id}
+//GET /departments/{id}
+//GET /orders/{id}
+//GET /saless/{id}
+//GET /users/{id}
+ 
+//POST /products
+//POST /product_types
+//POST /departments
+//POST /orders
+//POST /saless
+//POST /users
+
+//PUT /products/{id}
+//PUT /product_types/{id}
+//PUT /departments/{id}
+//PUT /orders/{id}
+//PUT /saless/{id}
+//PUT /users/{id}
+
+//DELETE /products/{id}
+//DELETE /product_types/{id}
+//DELETE /departments/{id}
+//DELETE /orders/{id}
+//DELETE /saless/{id}
+//DELETE /users/{id}
 
 //POST /reset
 app.post('/reset', (req, res) => {

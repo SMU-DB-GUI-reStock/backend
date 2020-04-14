@@ -1,7 +1,8 @@
-CREATE TABLE `products` (
-  `product_id` int PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE `product_types` (
+  `product_type_id` int PRIMARY KEY AUTO_INCREMENT,
   `dept_id` int,
-  `product_name` varchar(255)
+  `price` int,
+  `product_type_name` varchar(255)
 );
 
 CREATE TABLE `departments` (
@@ -30,9 +31,9 @@ CREATE TABLE `sales` (
   `sale_date` date
 );
 
-CREATE TABLE `inventory` (
-  `inventory_id` int PRIMARY KEY AUTO_INCREMENT,
-  `product_id` int,
+CREATE TABLE `products` (
+  `product_id` int PRIMARY KEY AUTO_INCREMENT,
+  `product_type_id` int,
   `dept_id` int,
   `order_id` int,
   `sale_id` int,
@@ -40,16 +41,16 @@ CREATE TABLE `inventory` (
   `location` ENUM ('back', 'shelf')
 );
 
-ALTER TABLE `products` ADD FOREIGN KEY (`dept_id`) REFERENCES `departments` (`dept_id`);
+ALTER TABLE `product_types` ADD FOREIGN KEY (`dept_id`) REFERENCES `departments` (`dept_id`);
 
 ALTER TABLE `departments` ADD FOREIGN KEY (`dept_mngr`) REFERENCES `users` (`user_id`);
 
 ALTER TABLE `users` ADD FOREIGN KEY (`dept_id`) REFERENCES `departments` (`dept_id`);
 
-ALTER TABLE `inventory` ADD FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`);
+ALTER TABLE `products` ADD FOREIGN KEY (`product_type_id`) REFERENCES `product_types` (`product_type_id`);
 
-ALTER TABLE `inventory` ADD FOREIGN KEY (`dept_id`) REFERENCES `departments` (`dept_id`);
+ALTER TABLE `products` ADD FOREIGN KEY (`dept_id`) REFERENCES `departments` (`dept_id`);
 
-ALTER TABLE `inventory` ADD FOREIGN KEY (`sale_id`) REFERENCES `sales` (`sale_id`);
+ALTER TABLE `products` ADD FOREIGN KEY (`sale_id`) REFERENCES `sales` (`sale_id`);
 
-ALTER TABLE `inventory` ADD FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`);
+ALTER TABLE `products` ADD FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`);

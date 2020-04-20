@@ -259,27 +259,26 @@ app.get('/users/:user_id', (req, res) => {
     }
   });
 });
-
  
 //POST /products
 //POST /product_types
 //POST /departments
 //POST /orders
-//POST /saless
+//POST /sales
 //POST /users
 
 //PUT /products/{id}
 //PUT /product_types/{id}
 //PUT /departments/{id}
 //PUT /orders/{id}
-//PUT /saless/{id}
+//PUT /sales/{id}
 //PUT /users/{id}
 
 //DELETE /products/{id}
 //DELETE /product_types/{id}
 //DELETE /departments/{id}
 //DELETE /orders/{id}
-//DELETE /saless/{id}
+//DELETE /sales/{id}
 //DELETE /users/{id}
 
 //TEMPLATE APIS - DO NOT USE - DELETE WHEN USABLE APIS ARE WRITTEN

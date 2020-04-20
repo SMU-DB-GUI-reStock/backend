@@ -65,6 +65,24 @@ app.get('/', (req, res) => {
 //POST /users
 
 //PUT /products/{id}
+// app.put('/products/:product_id', (req, res) => {
+//   connection.query('UPDATE products SET dp.products.product_type = '+ req.params.product_type +'  WHERE db.products.product_id = \'' + req.params.product_id + '\'', function (err, rows, fields) {
+//     if (err) {
+//       logger.error("Error while executing query");
+//       res.status(400).json({
+//         "data": [],
+//         "error": "MySQL error"
+//       })
+//     }
+//     else {
+//       res.status(200).json({
+//         "data": rows
+//       });
+//     }
+//   });
+// });
+
+
 //PUT /product_types/{id}
 //PUT /departments/{id}
 //PUT /orders/{id}
@@ -73,10 +91,90 @@ app.get('/', (req, res) => {
 
 //DELETE /products/{id}
 //DELETE /product_types/{id}
+app.delete('/product_types/:product_type_id', (req, res) => {
+  connection.query('DELETE FROM db.product_types WHERE db.product_types.product_type_id = \'' + req.params.product_type_id + '\'', function (err, rows, fields) {
+    if (err) {
+      logger.error("Error while executing query");
+      res.status(400).json({
+        "data": [],
+        "error": "MySQL error"
+      })
+    }
+    else {
+      res.status(200).json({
+        "data": rows
+      });
+    }
+  });
+});
 //DELETE /departments/{id}
+app.delete('/departments/:dept_id', (req, res) => {
+  connection.query('DELETE FROM db.departments WHERE db.departments.dept_id = \'' + req.params.dept_id + '\'', function (err, rows, fields) {
+    if (err) {
+      logger.error("Error while executing query");
+      res.status(400).json({
+        "data": [],
+        "error": "MySQL error"
+      })
+    }
+    else {
+      res.status(200).json({
+        "data": rows
+      });
+    }
+  });
+});
 //DELETE /orders/{id}
-//DELETE /saless/{id}
+app.delete('/orders/:order_id', (req, res) => {
+  connection.query('DELETE FROM db.orders WHERE db.orders.order_id = \'' + req.params.order_id + '\'', function (err, rows, fields) {
+    if (err) {
+      logger.error("Error while executing query");
+      res.status(400).json({
+        "data": [],
+        "error": "MySQL error"
+      })
+    }
+    else {
+      res.status(200).json({
+        "data": rows
+      });
+    }
+  });
+});
+//DELETE /sales/{id}
+app.delete('/sales/:sale_id', (req, res) => {
+  connection.query('DELETE FROM db.sales WHERE db.sales.sale_id = \'' + req.params.sale_id + '\'', function (err, rows, fields) {
+    if (err) {
+      logger.error("Error while executing query");
+      res.status(400).json({
+        "data": [],
+        "error": "MySQL error"
+      })
+    }
+    else {
+      res.status(200).json({
+        "data": rows
+      });
+    }
+  });
+});
 //DELETE /users/{id}
+app.delete('/users/:user_id', (req, res) => {
+  connection.query('DELETE FROM db.users WHERE db.users.user_id = \'' + req.params.user_id + '\'', function (err, rows, fields) {
+    if (err) {
+      logger.error("Error while executing query");
+      res.status(400).json({
+        "data": [],
+        "error": "MySQL error"
+      })
+    }
+    else {
+      res.status(200).json({
+        "data": rows
+      });
+    }
+  });
+});
 
 //POST /reset
 app.post('/reset', (req, res) => {

@@ -58,9 +58,52 @@ app.get('/', (req, res) => {
 //GET /users/{id}
  
 //POST /products
+
 //POST /product_types
+app.post('/product_types', (req, res) => {
+  console.log(req.body);
+
+  connection.query(`INSERT INTO db.product_types (dept_id, product_type_name, price) VALUES(${req.body.dept_id}, '${req.body.product_type_name}', ${req.body.price})`, function (err, rows, fields) {
+    if (err){
+      logger.error("Problem inserting into product_types table");
+      throw err;
+    }
+    else {
+      res.status(200).send(`added ${req.body.product_type_name} to the table!`);
+    }
+  });
+});
+
 //POST /departments
+app.post('/departments', (req, res) => {
+  console.log(req.body);
+
+  connection.query(`INSERT INTO db.departments (dept_name, dept_mngr) VALUES('${req.body.dept_name}',${req.body.dept_mngr})`, function (err, rows, fields) {
+    if (err){
+      logger.error("Problem inserting into departments table");
+      throw err;
+    }
+    else {
+      res.status(200).send(`added ${req.body.dept_name} to the table!`);
+    }
+  });
+});
+
 //POST /orders
+app.post('/orders', (req, res) => {
+  console.log(req.body);
+
+  connection.query(`INSERT INTO db.orders (order_date) VALUES('${req.body.order_date}')`, function (err, rows, fields) {
+    if (err){
+      logger.error("Problem inserting into orders table");
+      throw err;
+    }
+    else {
+      res.status(200).send(`added to the table!`);
+    }
+  });
+});
+
 //POST /saless
 //POST /users
 

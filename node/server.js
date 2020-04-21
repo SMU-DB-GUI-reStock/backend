@@ -105,6 +105,19 @@ app.post('/orders', (req, res) => {
 });
 
 //POST /saless
+app.post('/sales', (req, res) => {
+  console.log(req.body);
+
+  connection.query(`INSERT INTO db.sales (sale_date) VALUES('${req.body.sale_date}')`, function (err, rows, fields) {
+    if (err){
+      logger.error("Problem inserting into sales table");
+      throw err;
+    }
+    else {
+      res.status(200).send(`added to the table!`);
+    }
+  });
+});
 
 //POST /users
 app.post('/users', (req, res) => {

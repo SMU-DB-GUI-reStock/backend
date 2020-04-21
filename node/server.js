@@ -58,6 +58,26 @@ app.get('/', (req, res) => {
 //GET /users/{id}
  
 //POST /products
+app.post('/products', (req, res) => {
+  var type_id = req.body.product_type_id;
+  var dept_id = req.body.dept_id;
+  var order_id = req.body.order_id;
+  var exp_date = req.body.exp_date;
+  var location = req.body.location;
+
+  var ids = `${type_id}, ${dept_id}, ${order_id}`;
+  var values_string = 'product_type_id, dept_id, order_id, exp_date, location';
+
+  connection.query(`INSERT INTO db.products (${values_string}) VALUES(${ids}, '${req.body.exp_date}', '${req.body.location}' )`, function (err, rows, fields) {
+    if (err){
+      logger.error("Problem inserting into products table");
+      throw err;
+    }
+    else {
+      res.status(200).send(`added to the table!`);
+    }
+  });
+});
 
 //POST /product_types
 app.post('/product_types', (req, res) => {

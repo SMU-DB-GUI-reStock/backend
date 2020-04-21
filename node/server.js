@@ -105,7 +105,29 @@ app.post('/orders', (req, res) => {
 });
 
 //POST /saless
+
 //POST /users
+app.post('/users', (req, res) => {
+  var type = req.body.type;
+  var email = req.body.email;
+  var password = req.body.password;
+  var firstname = req.body.first;
+  var lastname = req.body.last;
+
+  var infos = [type,email,password,firstname,lastname];
+  var values = infos.join("','");
+  
+  connection.query(`INSERT INTO db.users (type, email, password, first, last) VALUES('${values}' )`, function (err, rows, fields) {
+    if (err){
+      logger.error("Problem inserting into users table");
+      throw err;
+    }
+    else {
+      res.status(200).send(`added to the table!`);
+    }
+  });
+});
+
 
 //PUT /products/{id}
 //PUT /product_types/{id}

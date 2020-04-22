@@ -45,23 +45,226 @@ app.get('/', (req, res) => {
 });
 
 //GET /products
+app.get('/products', (req, res) => {
+  connection.query('SELECT * FROM db.products', function (err, rows, fields) {
+    if (err) {
+      logger.error("Error while executing query");
+      res.status(400).json({
+        "data": [],
+        "error": "MySQL error"
+      })
+    }
+    else {
+      res.status(200).json({
+        "data": rows
+      });
+    }
+  });
+});
+
 //GET /product_types
+app.get('/product_types', (req, res) => {
+  connection.query('SELECT * FROM db.product_types', function (err, rows, fields) {
+    if (err) {
+      logger.error("Error while executing query");
+      res.status(400).json({
+        "data": [],
+        "error": "MySQL error"
+      })
+    }
+    else {
+      res.status(200).json({
+        "data": rows
+      });
+    }
+  });
+});
+
 //GET /departments
+app.get('/departments', (req, res) => {
+  connection.query('SELECT * FROM db.departments', function (err, rows, fields) {
+    if (err) {
+      logger.error("Error while executing query");
+      res.status(400).json({
+        "data": [],
+        "error": "MySQL error"
+      })
+    }
+    else {
+      res.status(200).json({
+        "data": rows
+      });
+    }
+  });
+});
+
 //GET /orders
-//GET /saless
+app.get('/orders', (req, res) => {
+  connection.query('SELECT * FROM db.orders', function (err, rows, fields) {
+    if (err) {
+      logger.error("Error while executing query");
+      res.status(400).json({
+        "data": [],
+        "error": "MySQL error"
+      })
+    }
+    else {
+      res.status(200).json({
+        "data": rows
+      });
+    }
+  });
+});
+
+//GET /sales
+app.get('/sales', (req, res) => {
+  connection.query('SELECT * FROM db.sales', function (err, rows, fields) {
+    if (err) {
+      logger.error("Error while executing query");
+      res.status(400).json({
+        "data": [],
+        "error": "MySQL error"
+      })
+    }
+    else {
+      res.status(200).json({
+        "data": rows
+      });
+    }
+  });
+});
+
 //GET /users
+app.get('/users', (req, res) => {
+  connection.query('SELECT * FROM db.users', function (err, rows, fields) {
+    if (err) {
+      logger.error("Error while executing query");
+      res.status(400).json({
+        "data": [],
+        "error": "MySQL error"
+      })
+    }
+    else {
+      res.status(200).json({
+        "data": rows
+      });
+    }
+  });
+});
+
 //GET /products/{id}
+app.get('/products/:product_id', (req, res) => {
+  connection.query('SELECT * FROM db.products WHERE db.products.product_id = \'' + req.params.product_id + '\'', function (err, rows, fields) {
+    if (err) {
+      logger.error("Error while executing query");
+      res.status(400).json({
+        "data": [],
+        "error": "MySQL error"
+      })
+    }
+    else {
+      res.status(200).json({
+        "data": rows
+      });
+    }
+  });
+});
+
 //GET /product_types/{id}
+app.get('/product_types/:product_type_id', (req, res) => {
+  connection.query('SELECT * FROM db.product_types WHERE db.product_types.product_type_id = \'' + req.params.product_type_id + '\'', function (err, rows, fields) {
+    if (err) {
+      logger.error("Error while executing query");
+      res.status(400).json({
+        "data": [],
+        "error": "MySQL error"
+      })
+    }
+    else {
+      res.status(200).json({
+        "data": rows
+      });
+    }
+  });
+});
+
 //GET /departments/{id}
+app.get('/departments/:dept_id', (req, res) => {
+  connection.query('SELECT * FROM db.departments WHERE db.departments.dept_id = \'' + req.params.dept_id + '\'', function (err, rows, fields) {
+    if (err) {
+      logger.error("Error while executing query");
+      res.status(400).json({
+        "data": [],
+        "error": "MySQL error"
+      })
+    }
+    else {
+      res.status(200).json({
+        "data": rows
+      });
+    }
+  });
+});
+
 //GET /orders/{id}
-//GET /saless/{id}
+app.get('/orders/:order_id', (req, res) => {
+  connection.query('SELECT * FROM db.orders WHERE db.orders.order_id = \'' + req.params.order_id + '\'', function (err, rows, fields) {
+    if (err) {
+      logger.error("Error while executing query");
+      res.status(400).json({
+        "data": [],
+        "error": "MySQL error"
+      })
+    }
+    else {
+      res.status(200).json({
+        "data": rows
+      });
+    }
+  });
+});
+
+//GET /sales/{id}
+app.get('/sales/:sale_id', (req, res) => {
+  connection.query('SELECT * FROM db.sales WHERE db.sales.sale_id = \'' + req.params.sale_id + '\'', function (err, rows, fields) {
+    if (err) {
+      logger.error("Error while executing query");
+      res.status(400).json({
+        "data": [],
+        "error": "MySQL error"
+      })
+    }
+    else {
+      res.status(200).json({
+        "data": rows
+      });
+    }
+  });
+});
+
 //GET /users/{id}
+app.get('/users/:user_id', (req, res) => {
+  connection.query('SELECT * FROM db.users WHERE db.users.user_id = \'' + req.params.user_id + '\'', function (err, rows, fields) {
+    if (err) {
+      logger.error("Error while executing query");
+      res.status(400).json({
+        "data": [],
+        "error": "MySQL error"
+      })
+    }
+    else {
+      res.status(200).json({
+        "data": rows
+      });
+    }
+  });
+});
  
 //POST /products
 //POST /product_types
 //POST /departments
 //POST /orders
-//POST /saless
+//POST /sales
 //POST /users
 
 //PUT /products/{id}
@@ -255,6 +458,8 @@ app.delete('/users/:user_id', (req, res) => {
     }
   });
 });
+
+//TEMPLATE APIS - DO NOT USE - DELETE WHEN USABLE APIS ARE WRITTEN
 
 //POST /reset
 app.post('/reset', (req, res) => {

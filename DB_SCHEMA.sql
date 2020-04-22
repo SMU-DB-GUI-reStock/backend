@@ -34,7 +34,6 @@ CREATE TABLE `sales` (
 CREATE TABLE `products` (
   `product_id` int PRIMARY KEY AUTO_INCREMENT,
   `product_type_id` int,
-  `dept_id` int,
   `order_id` int,
   `sale_id` int,
   `exp_date` date,
@@ -48,8 +47,6 @@ ALTER TABLE `departments` ADD FOREIGN KEY (`dept_mngr`) REFERENCES `users` (`use
 ALTER TABLE `users` ADD FOREIGN KEY (`dept_id`) REFERENCES `departments` (`dept_id`);
 
 ALTER TABLE `products` ADD FOREIGN KEY (`product_type_id`) REFERENCES `product_types` (`product_type_id`);
-
-ALTER TABLE `products` ADD FOREIGN KEY (`dept_id`) REFERENCES `departments` (`dept_id`);
 
 ALTER TABLE `products` ADD FOREIGN KEY (`sale_id`) REFERENCES `sales` (`sale_id`);
 

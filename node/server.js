@@ -170,6 +170,24 @@ app.post('/users', (req, res) => {
 //PUT /users/{id}
 
 //DELETE /products/{id}
+app.delete('/products/:product_id', (req, res) => {
+  connection.query('DELETE FROM db.products WHERE db.products.product_id = \'' + req.params.product_id + '\'', function (err, rows, fields) {
+    if (err) {
+      logger.error("Error while executing query");
+      res.status(400).json({
+        "data": [],
+        "error": "MySQL error"
+      })
+    }
+    else {
+      res.status(200).json({
+        "data": rows
+      });
+    }
+  });
+});
+
+
 //DELETE /product_types/{id}
 //DELETE /departments/{id}
 //DELETE /orders/{id}

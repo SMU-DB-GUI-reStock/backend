@@ -156,7 +156,7 @@ app.get('/users', (req, res) => {
 
 //GET /products/{id}
 app.get('/products/:product_id', (req, res) => {
-  connection.query('SELECT * FROM db.products WHERE db.products.product_id = \'' + req.params.product_id + '\'', function (err, rows, fields) {
+  connection.query('SELECT * FROM db.products WHERE db.products.product_id = ' + req.params.product_id + '', function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({
@@ -174,7 +174,7 @@ app.get('/products/:product_id', (req, res) => {
 
 //GET /product_types/{id}
 app.get('/product_types/:product_type_id', (req, res) => {
-  connection.query('SELECT * FROM db.product_types WHERE db.product_types.product_type_id = \'' + req.params.product_type_id + '\'', function (err, rows, fields) {
+  connection.query('SELECT * FROM db.product_types WHERE db.product_types.product_type_id = ' + req.params.product_type_id + '', function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({
@@ -192,7 +192,7 @@ app.get('/product_types/:product_type_id', (req, res) => {
 
 //GET /departments/{id}
 app.get('/departments/:dept_id', (req, res) => {
-  connection.query('SELECT * FROM db.departments WHERE db.departments.dept_id = \'' + req.params.dept_id + '\'', function (err, rows, fields) {
+  connection.query('SELECT * FROM db.departments WHERE db.departments.dept_id = ' + req.params.dept_id + '', function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({
@@ -210,7 +210,7 @@ app.get('/departments/:dept_id', (req, res) => {
 
 //GET /orders/{id}
 app.get('/orders/:order_id', (req, res) => {
-  connection.query('SELECT * FROM db.orders WHERE db.orders.order_id = \'' + req.params.order_id + '\'', function (err, rows, fields) {
+  connection.query('SELECT * FROM db.orders WHERE db.orders.order_id = ' + req.params.order_id + '', function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({
@@ -228,7 +228,7 @@ app.get('/orders/:order_id', (req, res) => {
 
 //GET /sales/{id}
 app.get('/sales/:sale_id', (req, res) => {
-  connection.query('SELECT * FROM db.sales WHERE db.sales.sale_id = \'' + req.params.sale_id + '\'', function (err, rows, fields) {
+  connection.query('SELECT * FROM db.sales WHERE db.sales.sale_id = ' + req.params.sale_id + '', function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({
@@ -246,7 +246,7 @@ app.get('/sales/:sale_id', (req, res) => {
 
 //GET /users/{id}
 app.get('/users/:user_id', (req, res) => {
-  connection.query('SELECT * FROM db.users WHERE db.users.user_id = \'' + req.params.user_id + '\'', function (err, rows, fields) {
+  connection.query('SELECT * FROM db.users WHERE db.users.user_id = ' + req.params.user_id + '', function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({
@@ -372,7 +372,7 @@ app.post('/users', (req, res) => {
 
 //PUT /products/{id}
 app.put('/products/:product_id', (req, res) => {
-  connection.query('UPDATE db.products SET db.products.product_type_id = ' + req.params.product_type_id + ',db.products.order_id = ' + req.params.order_id + ',db.products.sale_id = ' + req.params.sale_id + ',db.products.exp_date = ' + req.params.exp_date + ',db.products.location = ' + req.params.location + '  WHERE db.products.product_id = \'' + req.params.product_id + '\'', function (err, rows, fields) {
+  connection.query('UPDATE db.products SET db.products.product_type_id = ?, db.products.order_id = ?, db.products.sale_id = ?, db.products.exp_date = ?, db.products.location = ?  WHERE db.products.product_id = ?', [req.body.product_type_id, req.body.order_id, req.body.sale_id, req.body.exp_date, req.body.location, req.params.product_id], function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({
@@ -390,7 +390,7 @@ app.put('/products/:product_id', (req, res) => {
 
 //PUT /product_types/{id}
 app.put('/product_types/:product_type_id', (req, res) => {
-  connection.query('UPDATE db.product_types SET db.product_type.dept_id = ' + req.params.dept_id + ',db.product_type.price = ' + req.params.price + ',db.product_type.product_type_name = ' + req.params.product_type_name + ' WHERE db.product_type.product_type_id = \'' + req.params.product_type_id + '\'', function (err, rows, fields) {
+  connection.query('UPDATE db.product_types SET db.product_types.dept_id = ?, db.product_types.price = ?, db.product_types.product_type_name = ? WHERE db.product_types.product_type_id = ?', [req.body.dept_id, req.body.price, req.body.product_type_name, req.params.product_type_id], function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({
@@ -408,7 +408,7 @@ app.put('/product_types/:product_type_id', (req, res) => {
 
 //PUT /departments/{id}
 app.put('/departments/:dept_id', (req, res) => {
-  connection.query('UPDATE db.departments SET db.departments.dept_name = ' + req.params.dept_name + ', db.departments.dept_mngr = ' + req.params.dept_mngr + ' WHERE db.departments.dept_id = \'' + req.params.dept_id + '\'', function (err, rows, fields) {
+  connection.query('UPDATE db.departments SET db.departments.dept_name = ?, db.departments.dept_mngr = ? WHERE db.departments.dept_id = ?', [req.body.dept_name, req.body.dept_mngr, req.params.dept_id], function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({
@@ -426,7 +426,7 @@ app.put('/departments/:dept_id', (req, res) => {
 
 //PUT /orders/{id}
 app.put('/orders/:order_id', (req, res) => {
-  connection.query('UPDATE db.orders SET db.orders.order_date = ' + req.params.order_date + ' WHERE db.orders.order_id = \'' + req.params.order_id + '\'', function (err, rows, fields) {
+  connection.query('UPDATE db.orders SET db.orders.order_date = ? WHERE db.orders.order_id = ?', [req.body.order_date, req.params.order_id], function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({
@@ -444,7 +444,7 @@ app.put('/orders/:order_id', (req, res) => {
 
 //PUT /sales/{id}
 app.put('/sales/:sale_id', (req, res) => {
-  connection.query('UPDATE db.sales SET db.sales.sale_date = ' + req.params.sale_date + ' WHERE db.sales.sale_id = \'' + req.params.sale_id + '\'', function (err, rows, fields) {
+  connection.query('UPDATE db.sales SET db.sales.sale_date = ? WHERE db.sales.sale_id = ?', [req.body.sale_date, req.params.sale_id], function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({
@@ -462,7 +462,7 @@ app.put('/sales/:sale_id', (req, res) => {
 
 //PUT /users/{id}
 app.put('/users/:user_id', (req, res) => {
-  connection.query('UPDATE db.users SET db.users.type = ' + req.params.type + ',db.users.dept_id = ' + req.params.dept_id + ',db.users.email = ' + req.params.email + ',db.users.password = ' + req.params.password + ',db.users.first = ' + req.params.first + ',db.users.last = ' + req.params.last + ' WHERE db.users.user_id = \'' + req.params.user_id + '\'', function (err, rows, fields) {
+  connection.query('UPDATE db.users SET db.users.type = ?, db.users.dept_id = ?, db.users.email = ?, db.users.password = ?, db.users.first = ?, db.users.last = ? WHERE db.users.user_id = ?', [req.body.type, req.body.dept_id, req.body.email, req.body.password, req.body.first, req.body.last, req.params.user_id], function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({
@@ -482,7 +482,7 @@ app.put('/users/:user_id', (req, res) => {
 
 //DELETE /products/{id}
 app.delete('/products/:product_id', (req, res) => {
-  connection.query('DELETE FROM db.products WHERE db.products.product_id = \'' + req.params.product_id + '\'', function (err, rows, fields) {
+  connection.query('DELETE FROM db.products WHERE db.products.product_id = ' + req.params.product_id + '', function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({
@@ -500,7 +500,7 @@ app.delete('/products/:product_id', (req, res) => {
 
 //DELETE /product_types/{id}
 app.delete('/product_types/:product_type_id', (req, res) => {
-  connection.query('DELETE FROM db.product_types WHERE db.product_types.product_type_id = \'' + req.params.product_type_id + '\'', function (err, rows, fields) {
+  connection.query('DELETE FROM db.product_types WHERE db.product_types.product_type_id = ' + req.params.product_type_id + '', function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({
@@ -518,7 +518,7 @@ app.delete('/product_types/:product_type_id', (req, res) => {
 
 //DELETE /departments/{id}
 app.delete('/departments/:dept_id', (req, res) => {
-  connection.query('DELETE FROM db.departments WHERE db.departments.dept_id = \'' + req.params.dept_id + '\'', function (err, rows, fields) {
+  connection.query('DELETE FROM db.departments WHERE db.departments.dept_id = ' + req.params.dept_id + '', function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({
@@ -536,7 +536,7 @@ app.delete('/departments/:dept_id', (req, res) => {
 
 //DELETE /orders/{id}
 app.delete('/orders/:order_id', (req, res) => {
-  connection.query('DELETE FROM db.orders WHERE db.orders.order_id = \'' + req.params.order_id + '\'', function (err, rows, fields) {
+  connection.query('DELETE FROM db.orders WHERE db.orders.order_id = ' + req.params.order_id + '', function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({
@@ -554,7 +554,7 @@ app.delete('/orders/:order_id', (req, res) => {
 
 //DELETE /sales/{id}
 app.delete('/sales/:sale_id', (req, res) => {
-  connection.query('DELETE FROM db.sales WHERE db.sales.sale_id = \'' + req.params.sale_id + '\'', function (err, rows, fields) {
+  connection.query('DELETE FROM db.sales WHERE db.sales.sale_id = ' + req.params.sale_id + '', function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({
@@ -572,7 +572,7 @@ app.delete('/sales/:sale_id', (req, res) => {
 
 //DELETE /users/{id}
 app.delete('/users/:user_id', (req, res) => {
-  connection.query('DELETE FROM db.users WHERE db.users.user_id = \'' + req.params.user_id + '\'', function (err, rows, fields) {
+  connection.query('DELETE FROM db.users WHERE db.users.user_id = ' + req.params.user_id + '', function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({

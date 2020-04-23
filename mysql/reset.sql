@@ -38,7 +38,6 @@ CREATE TABLE sales (
 CREATE TABLE products (
   product_id int PRIMARY KEY AUTO_INCREMENT,
   product_type_id int,
-  dept_id int,
   order_id int,
   sale_id int,
   exp_date date,
@@ -52,8 +51,6 @@ ALTER TABLE departments ADD FOREIGN KEY (dept_mngr) REFERENCES users (user_id);
 ALTER TABLE users ADD FOREIGN KEY (dept_id) REFERENCES departments (dept_id);
 
 ALTER TABLE products ADD FOREIGN KEY (product_type_id) REFERENCES product_types (product_type_id);
-
-ALTER TABLE products ADD FOREIGN KEY (dept_id) REFERENCES departments (dept_id);
 
 ALTER TABLE products ADD FOREIGN KEY (sale_id) REFERENCES sales (sale_id);
 
@@ -113,41 +110,41 @@ INSERT INTO orders (order_date)
   ('2020-03-31'),
   ('2020-03-31');
 
-INSERT INTO products (product_type_id, dept_id, order_id, exp_date, location)
+INSERT INTO products (product_type_id, order_id, exp_date, location)
   VALUES
-  ( 1, 1, 3, '2020-04-14', 'shelf'),
-  ( 2, 1, 4, '2020-04-14', 'shelf'),
-  ( 2, 1, 4, '2020-04-14', 'shelf'),
-  ( 2, 1, 4, '2020-04-14', 'back' ),
-  ( 2, 1, 4, '2020-04-14', 'back' ),
-  ( 3, 1, 4, '2020-04-14', 'shelf'),
-  ( 4, 1, 3, '2020-04-14', 'shelf'),
-  ( 4, 1, 3, '2020-04-14', 'shelf'),
-  ( 5, 1, 3, '2020-04-14', 'shelf'),
-  ( 5, 1, 3, '2020-04-14', 'shelf'),
-  ( 5, 1, 3, '2020-04-14', 'back' ),
-  ( 5, 1, 3, '2020-04-14', 'back' ),
-  ( 5, 1, 3, '2020-04-14', 'back' ),
-  ( 6, 2, 1, '2020-04-14', 'shelf'),
-  ( 6, 2, 1, '2020-04-14', 'shelf'),
-  ( 7, 2, 2, '2020-04-14', 'shelf'),
-  ( 7, 2, 2, '2020-04-14', 'shelf'),
-  ( 8, 2, 1, '2020-04-14', 'shelf'),
-  ( 8, 2, 1, '2020-04-14', 'shelf'),
-  ( 8, 2, 1, '2020-04-14', 'back' ),
-  ( 9, 2, 1, '2020-04-14', 'shelf'),
-  ( 9, 2, 1, '2020-04-14', 'shelf'),
-  ( 9, 2, 1, '2020-04-14', 'back' ),
-  ( 9, 2, 1, '2020-04-14', 'back' ),
-  (10, 2, 2, '2020-04-14', 'shelf'),
-  (10, 2, 2, '2020-04-14', 'shelf'),
-  (11, 3, 5, '2020-04-14', 'shelf'),
-  (11, 3, 5, '2020-04-14', 'shelf'),
-  (11, 3, 5, '2020-04-14', 'back' ),
-  (12, 3, 5, '2020-04-14', 'shelf'),
-  (13, 3, 6, '2020-04-14', 'shelf'),
-  (14, 3, 6, '2020-04-14', 'shelf'),
-  (15, 3, 5, '2020-04-14', 'shelf'),
-  (15, 3, 5, '2020-04-14', 'shelf'),
-  (15, 3, 5, '2020-04-14', 'back' ),
-  (15, 3, 5, '2020-04-14', 'back' );
+  ( 1, 3, '2020-04-14', 'shelf'),
+  ( 2, 4, '2020-04-14', 'shelf'),
+  ( 2, 4, '2020-04-14', 'shelf'),
+  ( 2, 4, '2020-04-14', 'back' ),
+  ( 2, 4, '2020-04-14', 'back' ),
+  ( 3, 4, '2020-04-14', 'shelf'),
+  ( 4, 3, '2020-04-14', 'shelf'),
+  ( 4, 3, '2020-04-14', 'shelf'),
+  ( 5, 3, '2020-04-14', 'shelf'),
+  ( 5, 3, '2020-04-14', 'shelf'),
+  ( 5, 3, '2020-04-14', 'back' ),
+  ( 5, 3, '2020-04-14', 'back' ),
+  ( 5, 3, '2020-04-14', 'back' ),
+  ( 6, 1, '2020-04-14', 'shelf'),
+  ( 6, 1, '2020-04-14', 'shelf'),
+  ( 7, 2, '2020-04-14', 'shelf'),
+  ( 7, 2, '2020-04-14', 'shelf'),
+  ( 8, 1, '2020-04-14', 'shelf'),
+  ( 8, 1, '2020-04-14', 'shelf'),
+  ( 8, 1, '2020-04-14', 'back' ),
+  ( 9, 1, '2020-04-14', 'shelf'),
+  ( 9, 1, '2020-04-14', 'shelf'),
+  ( 9, 1, '2020-04-14', 'back' ),
+  ( 9, 1, '2020-04-14', 'back' ),
+  (10, 2, '2020-04-14', 'shelf'),
+  (10, 2, '2020-04-14', 'shelf'),
+  (11, 5, '2020-04-14', 'shelf'),
+  (11, 5, '2020-04-14', 'shelf'),
+  (11, 5, '2020-04-14', 'back' ),
+  (12, 5, '2020-04-14', 'shelf'),
+  (13, 6, '2020-04-14', 'shelf'),
+  (14, 6, '2020-04-14', 'shelf'),
+  (15, 5, '2020-04-14', 'shelf'),
+  (15, 5, '2020-04-14', 'shelf'),
+  (15, 5, '2020-04-14', 'back' ),
+  (15, 5, '2020-04-14', 'back' );

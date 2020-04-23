@@ -2,7 +2,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mysql = require('mysql');
-const { log, ExpressAPILogMiddleware } = require('@rama41222/node-logger');
+const {
+  log,
+  ExpressAPILogMiddleware
+} = require('@rama41222/node-logger');
 
 //mysql connection
 var connection = mysql.createConnection({
@@ -24,13 +27,19 @@ const config = {
 const app = express();
 
 //create a logger object.  Using logger is preferable to simply writing to the console.
-const logger = log({ console: true, file: false, label: config.name });
+const logger = log({
+  console: true,
+  file: false,
+  label: config.name
+});
 
 app.use(bodyParser.json());
 app.use(cors({
   origin: '*'
 }));
-app.use(ExpressAPILogMiddleware(logger, { request: true }));
+app.use(ExpressAPILogMiddleware(logger, {
+  request: true
+}));
 
 //Attempting to connect to the database.
 connection.connect(function (err) {
@@ -57,8 +66,7 @@ app.get('/products', (req, res) => {
         "data": [],
         "error": "MySQL error"
       })
-    }
-    else {
+    } else {
       res.status(200).json({
         "data": rows
       });
@@ -75,8 +83,7 @@ app.get('/product_types', (req, res) => {
         "data": [],
         "error": "MySQL error"
       })
-    }
-    else {
+    } else {
       res.status(200).json({
         "data": rows
       });
@@ -93,8 +100,7 @@ app.get('/departments', (req, res) => {
         "data": [],
         "error": "MySQL error"
       })
-    }
-    else {
+    } else {
       res.status(200).json({
         "data": rows
       });
@@ -111,8 +117,7 @@ app.get('/orders', (req, res) => {
         "data": [],
         "error": "MySQL error"
       })
-    }
-    else {
+    } else {
       res.status(200).json({
         "data": rows
       });
@@ -129,8 +134,7 @@ app.get('/sales', (req, res) => {
         "data": [],
         "error": "MySQL error"
       })
-    }
-    else {
+    } else {
       res.status(200).json({
         "data": rows
       });
@@ -147,8 +151,7 @@ app.get('/users', (req, res) => {
         "data": [],
         "error": "MySQL error"
       })
-    }
-    else {
+    } else {
       res.status(200).json({
         "data": rows
       });
@@ -169,8 +172,7 @@ app.get('/products/:product_id', (req, res) => {
         "data": [],
         "error": "MySQL error"
       })
-    }
-    else {
+    } else {
       res.status(200).json({
         "data": rows
       });
@@ -187,8 +189,7 @@ app.get('/product_types/:product_type_id', (req, res) => {
         "data": [],
         "error": "MySQL error"
       })
-    }
-    else {
+    } else {
       res.status(200).json({
         "data": rows
       });
@@ -205,8 +206,7 @@ app.get('/departments/:dept_id', (req, res) => {
         "data": [],
         "error": "MySQL error"
       })
-    }
-    else {
+    } else {
       res.status(200).json({
         "data": rows
       });
@@ -223,8 +223,7 @@ app.get('/orders/:order_id', (req, res) => {
         "data": [],
         "error": "MySQL error"
       })
-    }
-    else {
+    } else {
       res.status(200).json({
         "data": rows
       });
@@ -241,8 +240,7 @@ app.get('/sales/:sale_id', (req, res) => {
         "data": [],
         "error": "MySQL error"
       })
-    }
-    else {
+    } else {
       res.status(200).json({
         "data": rows
       });
@@ -259,8 +257,7 @@ app.get('/users/:user_id', (req, res) => {
         "data": [],
         "error": "MySQL error"
       })
-    }
-    else {
+    } else {
       res.status(200).json({
         "data": rows
       });
@@ -271,7 +268,7 @@ app.get('/users/:user_id', (req, res) => {
 
 
 //CREATE ROW REQUEST ----------------------------------------------
- 
+
 //POST /products
 app.post('/products', (req, res) => {
   var type_id = req.body.product_type_id;
@@ -284,11 +281,10 @@ app.post('/products', (req, res) => {
   var values_string = 'product_type_id, dept_id, order_id, exp_date, location';
 
   connection.query(`INSERT INTO db.products (${values_string}) VALUES(${ids}, '${req.body.exp_date}', '${req.body.location}' )`, function (err, rows, fields) {
-    if (err){
+    if (err) {
       logger.error("Problem inserting into products table");
       throw err;
-    }
-    else {
+    } else {
       res.status(200).send(`added to the table!`);
     }
   });
@@ -299,11 +295,10 @@ app.post('/product_types', (req, res) => {
   console.log(req.body);
 
   connection.query(`INSERT INTO db.product_types (dept_id, product_type_name, price) VALUES(${req.body.dept_id}, '${req.body.product_type_name}', ${req.body.price})`, function (err, rows, fields) {
-    if (err){
+    if (err) {
       logger.error("Problem inserting into product_types table");
       throw err;
-    }
-    else {
+    } else {
       res.status(200).send(`added ${req.body.product_type_name} to the table!`);
     }
   });
@@ -314,11 +309,10 @@ app.post('/departments', (req, res) => {
   console.log(req.body);
 
   connection.query(`INSERT INTO db.departments (dept_name, dept_mngr) VALUES('${req.body.dept_name}',${req.body.dept_mngr})`, function (err, rows, fields) {
-    if (err){
+    if (err) {
       logger.error("Problem inserting into departments table");
       throw err;
-    }
-    else {
+    } else {
       res.status(200).send(`added ${req.body.dept_name} to the table!`);
     }
   });
@@ -329,11 +323,10 @@ app.post('/orders', (req, res) => {
   console.log(req.body);
 
   connection.query(`INSERT INTO db.orders (order_date) VALUES('${req.body.order_date}')`, function (err, rows, fields) {
-    if (err){
+    if (err) {
       logger.error("Problem inserting into orders table");
       throw err;
-    }
-    else {
+    } else {
       res.status(200).send(`added to the table!`);
     }
   });
@@ -344,11 +337,10 @@ app.post('/sales', (req, res) => {
   console.log(req.body);
 
   connection.query(`INSERT INTO db.sales (sale_date) VALUES('${req.body.sale_date}')`, function (err, rows, fields) {
-    if (err){
+    if (err) {
       logger.error("Problem inserting into sales table");
       throw err;
-    }
-    else {
+    } else {
       res.status(200).send(`added to the table!`);
     }
   });
@@ -362,15 +354,14 @@ app.post('/users', (req, res) => {
   var firstname = req.body.first;
   var lastname = req.body.last;
 
-  var infos = [type,email,password,firstname,lastname];
+  var infos = [type, email, password, firstname, lastname];
   var values = infos.join("','");
-  
+
   connection.query(`INSERT INTO db.users (type, email, password, first, last) VALUES('${values}' )`, function (err, rows, fields) {
-    if (err){
+    if (err) {
       logger.error("Problem inserting into users table");
       throw err;
-    }
-    else {
+    } else {
       res.status(200).send(`added to the table!`);
     }
   });
@@ -389,8 +380,7 @@ app.put('/products/:product_id', (req, res) => {
         "data": [],
         "error": "MySQL error"
       })
-    }
-    else {
+    } else {
       res.status(200).json({
         "data": rows
       });
@@ -407,8 +397,7 @@ app.put('/product_types/:product_type_id', (req, res) => {
         "data": [],
         "error": "MySQL error"
       })
-    }
-    else {
+    } else {
       res.status(200).json({
         "data": rows
       });
@@ -425,8 +414,7 @@ app.put('/departments/:dept_id', (req, res) => {
         "data": [],
         "error": "MySQL error"
       })
-    }
-    else {
+    } else {
       res.status(200).json({
         "data": rows
       });
@@ -443,8 +431,7 @@ app.put('/orders/:order_id', (req, res) => {
         "data": [],
         "error": "MySQL error"
       })
-    }
-    else {
+    } else {
       res.status(200).json({
         "data": rows
       });
@@ -461,8 +448,7 @@ app.put('/sales/:sale_id', (req, res) => {
         "data": [],
         "error": "MySQL error"
       })
-    }
-    else {
+    } else {
       res.status(200).json({
         "data": rows
       });
@@ -479,8 +465,7 @@ app.put('/users/:user_id', (req, res) => {
         "data": [],
         "error": "MySQL error"
       })
-    }
-    else {
+    } else {
       res.status(200).json({
         "data": rows
       });
@@ -501,8 +486,7 @@ app.delete('/products/:product_id', (req, res) => {
         "data": [],
         "error": "MySQL error"
       })
-    }
-    else {
+    } else {
       res.status(200).json({
         "data": rows
       });
@@ -519,8 +503,7 @@ app.delete('/product_types/:product_type_id', (req, res) => {
         "data": [],
         "error": "MySQL error"
       })
-    }
-    else {
+    } else {
       res.status(200).json({
         "data": rows
       });
@@ -537,8 +520,7 @@ app.delete('/departments/:dept_id', (req, res) => {
         "data": [],
         "error": "MySQL error"
       })
-    }
-    else {
+    } else {
       res.status(200).json({
         "data": rows
       });
@@ -555,8 +537,7 @@ app.delete('/orders/:order_id', (req, res) => {
         "data": [],
         "error": "MySQL error"
       })
-    }
-    else {
+    } else {
       res.status(200).json({
         "data": rows
       });
@@ -573,8 +554,7 @@ app.delete('/sales/:sale_id', (req, res) => {
         "data": [],
         "error": "MySQL error"
       })
-    }
-    else {
+    } else {
       res.status(200).json({
         "data": rows
       });
@@ -591,8 +571,7 @@ app.delete('/users/:user_id', (req, res) => {
         "data": [],
         "error": "MySQL error"
       })
-    }
-    else {
+    } else {
       res.status(200).json({
         "data": rows
       });
@@ -621,8 +600,7 @@ app.get('/product_types/:product_type_id/quantity', (req, res) => {
         "data": [],
         "error": "MySQL error"
       })
-    }
-    else {
+    } else {
       res.status(200).json({
         "data": rows
       });

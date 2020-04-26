@@ -256,24 +256,6 @@ app.delete('/users/:user_id', (req, res) => {
   });
 });
 
-//DELETE /DelExpired
-app.delete('/DelExpried', (req, res) => {
-  connection.query('DELETE FROM db.products WHERE db.products.exp_date < GETDATE() ,function (err, rows, fields) {
-    if (err) {
-      logger.error("Error while executing query");
-      res.status(400).json({
-        "data": [],
-        "error": "MySQL error"
-      })
-    }
-    else {
-      res.status(200).json({
-        "data": rows
-      });
-    }
-  });
-});
-
 //POST /reset
 app.post('/reset', (req, res) => {
   connection.query('drop table if exists test_table', function (err, rows, fields) {

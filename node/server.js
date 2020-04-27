@@ -76,7 +76,14 @@ app.get('/products', (req, res) => {
 
 //GET /product_types
 app.get('/product_types', (req, res) => {
-  connection.query('SELECT * FROM db.product_types', function (err, rows, fields) {
+  connection.query(`
+      SELECT db.product_types.*, db.departments.dept_name, COUNT(*) AS in_stock
+      FROM db.product_types 
+        JOIN db.departments ON db.product_types.dept_id = db.departments.dept_id
+        JOIN db.products ON db.product_types.product_type_id = db.products.product_type_id
+      AND db.products.sale_id IS NULL
+      GROUP BY db.product_types.product_type_id
+      `, function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({
@@ -182,7 +189,15 @@ app.get('/products/:product_id', (req, res) => {
 
 //GET /product_types/{id}
 app.get('/product_types/:product_type_id', (req, res) => {
-  connection.query('SELECT * FROM db.product_types WHERE db.product_types.product_type_id = ?', [req.params.product_type_id], function (err, rows, fields) {
+  connection.query(`
+      SELECT db.product_types.*, db.departments.dept_name, COUNT(*) AS in_stock
+      FROM db.product_types 
+        JOIN db.departments ON db.product_types.dept_id = db.departments.dept_id
+        JOIN db.products ON db.product_types.product_type_id = db.products.product_type_id
+      WHERE db.product_types.product_type_id = ?
+      AND db.products.sale_id IS NULL
+      GROUP BY db.product_types.product_type_id
+      `, [req.params.product_type_id], function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({

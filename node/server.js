@@ -93,7 +93,7 @@ app.get('/product_types', (req, res) => {
 
 //GET /departments
 app.get('/departments', (req, res) => {
-  connection.query('SELECT * FROM db.departments', function (err, rows, fields) {
+  connection.query('SELECT db.departments.*, db.users.first as manager_first, db.users.last as manager_last FROM db.departments JOIN db.users ON db.departments.dept_mngr = db.users.user_id', function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({
@@ -199,7 +199,7 @@ app.get('/product_types/:product_type_id', (req, res) => {
 
 //GET /departments/{id}
 app.get('/departments/:dept_id', (req, res) => {
-  connection.query('SELECT * FROM db.departments WHERE db.departments.dept_id = ?', [req.params.dept_id], function (err, rows, fields) {
+  connection.query('SELECT db.departments.*,db.users.first as manager_first, db.users.last as manager_last FROM db.departments JOIN db.users ON db.departments.dept_mngr = db.users.user_id WHERE db.departments.dept_id = ?', [req.params.dept_id], function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({

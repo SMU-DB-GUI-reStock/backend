@@ -608,6 +608,34 @@ app.get('/product_types/:product_type_id/quantity', (req, res) => {
   });
 });
 
+//GET /login
+
+app.get('/login', (req, res) => {
+  connection.query(`
+      SELECT 
+        CASE 
+          WHEN EXISTS (
+            SELECT * 
+            FROM db.users 
+            WHERE db.users.email = ? AND db.users.password = ?) 
+          THEN 1
+          ELSE 0
+        END as Valid
+          `, [req.body.email, req.body.password], function (err, rows, fields) {
+    if (err) {
+      logger.error("Error while executing query");
+      res.status(400).json({
+        "data": [],
+        "error": "MySQL error"
+      })
+    } else {
+      res.status(200).json({
+        "data": rows
+      });
+    }
+  });
+});
+
 //connecting the express object to listen on a particular port as defined in the config object.
 app.listen(config.port, config.host, (e) => {
   if (e) {

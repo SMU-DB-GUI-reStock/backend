@@ -699,7 +699,7 @@ app.get('/product_types/:product_type_id/quantity', (req, res) => {
 
 //GET /login
 
-app.get('/login', (req, res) => {
+app.post('/login', (req, res) => {
   console.log(req.body);
 
   connection.query(`

@@ -77,12 +77,13 @@ app.get('/products', (req, res) => {
 //GET /product_types
 app.get('/product_types', (req, res) => {
   connection.query(`
-      SELECT db.product_types.*, db.departments.dept_name, COUNT(*) AS in_stock
+      SELECT db.product_types.*, db.departments.dept_name, COUNT(db.products.product_id) AS in_stock
       FROM db.product_types 
-        JOIN db.departments ON db.product_types.dept_id = db.departments.dept_id
-        JOIN db.products ON db.product_types.product_type_id = db.products.product_type_id
-      AND db.products.sale_id IS NULL
+        INNER JOIN db.departments ON db.product_types.dept_id = db.departments.dept_id
+        LEFT OUTER JOIN db.products ON db.product_types.product_type_id = db.products.product_type_id
+          AND db.products.sale_id IS NULL
       GROUP BY db.product_types.product_type_id
+      ORDER BY db.product_types.product_type_id
       `, function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
@@ -190,13 +191,14 @@ app.get('/products/:product_id', (req, res) => {
 //GET /product_types/{id}
 app.get('/product_types/:product_type_id', (req, res) => {
   connection.query(`
-      SELECT db.product_types.*, db.departments.dept_name, COUNT(*) AS in_stock
+      SELECT db.product_types.*, db.departments.dept_name, COUNT(db.products.product_id) AS in_stock
       FROM db.product_types 
-        JOIN db.departments ON db.product_types.dept_id = db.departments.dept_id
-        JOIN db.products ON db.product_types.product_type_id = db.products.product_type_id
-      WHERE db.product_types.product_type_id = ?
-      AND db.products.sale_id IS NULL
+        INNER JOIN db.departments ON db.product_types.dept_id = db.departments.dept_id
+        LEFT OUTER JOIN db.products ON db.product_types.product_type_id = db.products.product_type_id
+            AND db.products.sale_id IS NULL
+      WHERE db.product_types.product_type_id = 1
       GROUP BY db.product_types.product_type_id
+      ORDER BY db.product_types.product_type_id
       `, [req.params.product_type_id], function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
@@ -286,15 +288,12 @@ app.get('/users/:user_id', (req, res) => {
 
 //POST /products
 app.post('/products', (req, res) => {
-  var type_id = req.body.product_type_id;
-  var order_id = req.body.order_id;
-  var exp_date = req.body.exp_date;
-  var location = req.body.location;
+  console.log(req.body);
 
-  var ids = `${type_id}, ${order_id}`;
-  var values_string = 'product_type_id, order_id, exp_date, location';
+  var values_string = 'product_type_id, order_id, sale_id, exp_date, location';
+  var values = [req.body.product_type_id, req.body.order_id, req.body.sale_id, req.body.exp_date, req.body.location];
 
-  connection.query(`INSERT INTO db.products (${values_string}) VALUES(${ids}, '${req.body.exp_date}', '${req.body.location}' )`, function (err, rows, fields) {
+  connection.query(`INSERT INTO db.products (${values_string}) VALUES(?, ?, ?, ?, ?)`, values, function (err, rows, fields) {
     if (err) {
       logger.error("Problem inserting into products table");
       throw err;
@@ -308,7 +307,10 @@ app.post('/products', (req, res) => {
 app.post('/product_types', (req, res) => {
   console.log(req.body);
 
-  connection.query(`INSERT INTO db.product_types (dept_id, product_type_name, price) VALUES(${req.body.dept_id}, '${req.body.product_type_name}', ${req.body.price})`, function (err, rows, fields) {
+  var values_string = 'dept_id, product_type_name, price';
+  var values = [req.body.dept_id, req.body.product_type_name, req.body.price];
+
+  connection.query(`INSERT INTO db.product_types (${values_string}) VALUES(?, ?, ?)`, values, function (err, rows, fields) {
     if (err) {
       logger.error("Problem inserting into product_types table");
       throw err;
@@ -322,7 +324,10 @@ app.post('/product_types', (req, res) => {
 app.post('/departments', (req, res) => {
   console.log(req.body);
 
-  connection.query(`INSERT INTO db.departments (dept_name, dept_mngr) VALUES('${req.body.dept_name}',${req.body.dept_mngr})`, function (err, rows, fields) {
+  var values_string = 'dept_name, dept_mngr';
+  var values = [req.body.dept_name, req.body.dept_mngr];
+
+  connection.query(`INSERT INTO db.departments (${values_string}) VALUES(?, ?)`, values, function (err, rows, fields) {
     if (err) {
       logger.error("Problem inserting into departments table");
       throw err;
@@ -336,7 +341,10 @@ app.post('/departments', (req, res) => {
 app.post('/orders', (req, res) => {
   console.log(req.body);
 
-  connection.query(`INSERT INTO db.orders (order_date) VALUES('${req.body.order_date}')`, function (err, rows, fields) {
+  var values_string = 'order_date';
+  var values = [req.body.order_date];
+
+  connection.query(`INSERT INTO db.orders (${values_string}) VALUES(?)`, values, function (err, rows, fields) {
     if (err) {
       logger.error("Problem inserting into orders table");
       throw err;
@@ -350,7 +358,10 @@ app.post('/orders', (req, res) => {
 app.post('/sales', (req, res) => {
   console.log(req.body);
 
-  connection.query(`INSERT INTO db.sales (sale_date) VALUES('${req.body.sale_date}')`, function (err, rows, fields) {
+  var values_string = 'sale_date';
+  var values = [req.body.sale_date];
+
+  connection.query(`INSERT INTO db.sales (${values_string}) VALUES(?)`, values, function (err, rows, fields) {
     if (err) {
       logger.error("Problem inserting into sales table");
       throw err;
@@ -362,16 +373,12 @@ app.post('/sales', (req, res) => {
 
 //POST /users
 app.post('/users', (req, res) => {
-  var type = req.body.type;
-  var email = req.body.email;
-  var password = req.body.password;
-  var firstname = req.body.first;
-  var lastname = req.body.last;
+  console.log(req.body);
 
-  var infos = [type, email, password, firstname, lastname];
-  var values = infos.join("','");
+  var values_string = 'type, dept_id, email, password, first, last';
+  var values = [req.body.type, req.body.email, req.body.dept_id, req.body.password, req.body.first, req.body.last]
 
-  connection.query(`INSERT INTO db.users (type, email, password, first, last) VALUES('${values}' )`, function (err, rows, fields) {
+  connection.query(`INSERT INTO db.users (${values_string}) VALUES(?, ?, ?, ?, ?, ?)`, values, function (err, rows, fields) {
     if (err) {
       logger.error("Problem inserting into users table");
       throw err;
@@ -387,7 +394,20 @@ app.post('/users', (req, res) => {
 
 //PUT /products/{id}
 app.put('/products/:product_id', (req, res) => {
-  connection.query('UPDATE db.products SET db.products.product_type_id = ?, db.products.order_id = ?, db.products.sale_id = ?, db.products.exp_date = ?, db.products.location = ?  WHERE db.products.product_id = ?', [req.body.product_type_id, req.body.order_id, req.body.sale_id, req.body.exp_date, req.body.location, req.params.product_id], function (err, rows, fields) {
+  console.log(req.body);
+
+  var values = [req.body.product_type_id, req.body.order_id, req.body.sale_id, req.body.exp_date, req.body.location, req.params.product_id];
+
+  connection.query(`
+      UPDATE db.products 
+      SET 
+        db.products.product_type_id = ?, 
+        db.products.order_id = ?, 
+        db.products.sale_id = ?, 
+        db.products.exp_date = ?, 
+        db.products.location = ?
+        WHERE db.products.product_id = ?
+      `, values, function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({
@@ -404,7 +424,18 @@ app.put('/products/:product_id', (req, res) => {
 
 //PUT /product_types/{id}
 app.put('/product_types/:product_type_id', (req, res) => {
-  connection.query('UPDATE db.product_types SET db.product_types.dept_id = ?, db.product_types.price = ?, db.product_types.product_type_name = ? WHERE db.product_types.product_type_id = ?', [req.body.dept_id, req.body.price, req.body.product_type_name, req.params.product_type_id], function (err, rows, fields) {
+  console.log(req.body);
+
+  var values = [req.body.dept_id, req.body.price, req.body.product_type_name, req.params.product_type_id];
+
+  connection.query(`
+      UPDATE db.product_types 
+      SET 
+        db.product_types.dept_id = ?, 
+        db.product_types.price = ?, 
+        db.product_types.product_type_name = ? 
+        WHERE db.product_types.product_type_id = ?
+      `, values, function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({
@@ -421,7 +452,17 @@ app.put('/product_types/:product_type_id', (req, res) => {
 
 //PUT /departments/{id}
 app.put('/departments/:dept_id', (req, res) => {
-  connection.query('UPDATE db.departments SET db.departments.dept_name = ?, db.departments.dept_mngr = ? WHERE db.departments.dept_id = ?', [req.body.dept_name, req.body.dept_mngr, req.params.dept_id], function (err, rows, fields) {
+  console.log(req.body);
+
+  var values = [req.body.dept_name, req.body.dept_mngr, req.params.dept_id];
+
+  connection.query(`
+      UPDATE db.departments 
+      SET 
+        db.departments.dept_name = ?, 
+        db.departments.dept_mngr = ? 
+        WHERE db.departments.dept_id = ?
+      `, values, function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({
@@ -438,7 +479,16 @@ app.put('/departments/:dept_id', (req, res) => {
 
 //PUT /orders/{id}
 app.put('/orders/:order_id', (req, res) => {
-  connection.query('UPDATE db.orders SET db.orders.order_date = ? WHERE db.orders.order_id = ?', [req.body.order_date, req.params.order_id], function (err, rows, fields) {
+  console.log(req.body);
+
+  var values = [req.body.order_date, req.params.order_id];
+
+  connection.query(`
+      UPDATE db.orders 
+      SET 
+        db.orders.order_date = ? 
+        WHERE db.orders.order_id = ?
+      `, values, function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({
@@ -455,7 +505,16 @@ app.put('/orders/:order_id', (req, res) => {
 
 //PUT /sales/{id}
 app.put('/sales/:sale_id', (req, res) => {
-  connection.query('UPDATE db.sales SET db.sales.sale_date = ? WHERE db.sales.sale_id = ?', [req.body.sale_date, req.params.sale_id], function (err, rows, fields) {
+  console.log(req.body);
+
+  var values = [req.body.sale_date, req.params.sale_id];
+
+  connection.query(`
+      UPDATE db.sales 
+      SET 
+        db.sales.sale_date = ? 
+        WHERE db.sales.sale_id = ?
+      `, values, function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({
@@ -472,7 +531,21 @@ app.put('/sales/:sale_id', (req, res) => {
 
 //PUT /users/{id}
 app.put('/users/:user_id', (req, res) => {
-  connection.query('UPDATE db.users SET db.users.type = ?, db.users.dept_id = ?, db.users.email = ?, db.users.password = ?, db.users.first = ?, db.users.last = ? WHERE db.users.user_id = ?', [req.body.type, req.body.dept_id, req.body.email, req.body.password, req.body.first, req.body.last, req.params.user_id], function (err, rows, fields) {
+  console.log(req.body);
+
+  var values = [req.body.type, req.body.dept_id, req.body.email, req.body.password, req.body.first, req.body.last, req.params.user_id];
+
+  connection.query(`
+      UPDATE db.users 
+      SET 
+        db.users.type = ?, 
+        db.users.dept_id = ?, 
+        db.users.email = ?, 
+        db.users.password = ?, 
+        db.users.first = ?, 
+        db.users.last = ? 
+        WHERE db.users.user_id = ?
+      `, values, function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({
@@ -600,6 +673,8 @@ app.delete('/users/:user_id', (req, res) => {
 //GET /product_types/:product_type_id/quantity
 
 app.get('/product_types/:product_type_id/quantity', (req, res) => {
+  console.log(req.body);
+
   connection.query(`
       SELECT COUNT(*) as in_stock 
       FROM db.products 
@@ -625,6 +700,8 @@ app.get('/product_types/:product_type_id/quantity', (req, res) => {
 //GET /login
 
 app.get('/login', (req, res) => {
+  console.log(req.body);
+
   connection.query(`
       SELECT 
         CASE 

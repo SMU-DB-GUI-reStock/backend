@@ -376,7 +376,7 @@ app.post('/users', (req, res) => {
   console.log(req.body);
 
   var values_string = 'type, dept_id, email, password, first, last';
-  var values = [req.body.type, req.body.email, req.body.dept_id, req.body.password, req.body.first, req.body.last]
+  var values = [req.body.type, req.body.dept_id, req.body.email, req.body.password, req.body.first, req.body.last]
 
   connection.query(`INSERT INTO db.users (${values_string}) VALUES(?, ?, ?, ?, ?, ?)`, values, function (err, rows, fields) {
     if (err) {

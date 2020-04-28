@@ -196,7 +196,7 @@ app.get('/product_types/:product_type_id', (req, res) => {
         INNER JOIN db.departments ON db.product_types.dept_id = db.departments.dept_id
         LEFT OUTER JOIN db.products ON db.product_types.product_type_id = db.products.product_type_id
             AND db.products.sale_id IS NULL
-      WHERE db.product_types.product_type_id = 1
+      WHERE db.product_types.product_type_id = ?
       GROUP BY db.product_types.product_type_id
       ORDER BY db.product_types.product_type_id
       `, [req.params.product_type_id], function (err, rows, fields) {
@@ -756,7 +756,16 @@ app.get('/users/department/:dept_id', (req, res) => {
 app.get('/product_types/name/:product_type_name', (req, res) => {
   console.log(req.body);
 
-  connection.query("SELECT * FROM db.product_types WHERE db.product_types.product_type_name LIKE" + connection.escape('%'+req.params.product_type_name+'%'), function (err, rows, fields) {
+  connection.query(`
+      SELECT db.product_types.*, db.departments.dept_name, COUNT(db.products.product_id) AS in_stock
+      FROM db.product_types 
+        INNER JOIN db.departments ON db.product_types.dept_id = db.departments.dept_id
+        LEFT OUTER JOIN db.products ON db.product_types.product_type_id = db.products.product_type_id
+            AND db.products.sale_id IS NULL
+      WHERE db.product_types.product_type_name LIKE ` + connection.escape('%'+req.params.product_type_name+'%') + ` 
+      GROUP BY db.product_types.product_type_id
+      ORDER BY db.product_types.product_type_id
+    `, function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({

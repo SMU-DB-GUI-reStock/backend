@@ -697,7 +697,7 @@ app.get('/product_types/:product_type_id/quantity', (req, res) => {
   });
 });
 
-//GET /login
+//POST /login
 
 app.post('/login', (req, res) => {
   console.log(req.body);
@@ -713,6 +713,70 @@ app.post('/login', (req, res) => {
           ELSE 0
         END as Valid
           `, [req.body.email, req.body.password], function (err, rows, fields) {
+    if (err) {
+      logger.error("Error while executing query");
+      res.status(400).json({
+        "data": [],
+        "error": "MySQL error"
+      })
+    } else {
+      res.status(200).json({
+        "data": rows
+      });
+    }
+  });
+});
+
+//GET /users/department/:dept_id
+app.get('/users/department/:dept_id', (req, res) => {
+  console.log(req.body);
+
+  connection.query(`
+      SELECT db.users.* 
+      FROM db.users 
+      INNER JOIN db.departments 
+        ON db.users.dept_id = db.departments.dept_id 
+      WHERE db.departments.dept_id = ?
+      `, [req.params.dept_id], function (err, rows, fields) {
+    if (err) {
+      logger.error("Error while executing query");
+      res.status(400).json({
+        "data": [],
+        "error": "MySQL error"
+      })
+    } else {
+      res.status(200).json({
+        "data": rows
+      });
+    }
+  });
+});
+
+//GET /product_types/name/:product_type_name
+app.get('/product_types/name/:product_type_name', (req, res) => {
+  console.log(req.body);
+
+  connection.query(`SELECT * FROM db.product_types WHERE db.product_types.product_type_name = ?`, [req.params.product_type_name], function (err, rows, fields) {
+    if (err) {
+      logger.error("Error while executing query");
+      res.status(400).json({
+        "data": [],
+        "error": "MySQL error"
+      })
+    } else {
+      res.status(200).json({
+        "data": rows
+      });
+    }
+  });
+});
+
+
+//GET /product_types/department/:dept_id
+app.get('/product_types/department/:dept_id', (req, res) => {
+  console.log(req.body);
+
+  connection.query(`SELECT * FROM db.product_types WHERE db.product_types.dept_id = ?`, [req.params.dept_id], function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({

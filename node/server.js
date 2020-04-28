@@ -635,7 +635,7 @@ app.get('/login', (req, res) => {
           THEN 1
           ELSE 0
         END as Valid
-          `, [req.body.email, req.body.password], function (err, rows, fields) {
+          `, [req.query.email, req.query.password], function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({

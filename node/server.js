@@ -791,6 +791,25 @@ app.get('/product_types/department/:dept_id', (req, res) => {
   });
 });
 
+//GET /products/product_type/:product_type_id
+app.get('/products/product_type/:product_type_id', (req, res) => {
+  console.log(req.body);
+
+  connection.query(`SELECT * FROM db.products WHERE db.products.product_type_id = ?`, [req.params.product_type_id], function (err, rows, fields) {
+    if (err) {
+      logger.error("Error while executing query");
+      res.status(400).json({
+        "data": [],
+        "error": "MySQL error"
+      })
+    } else {
+      res.status(200).json({
+        "data": rows
+      });
+    }
+  });
+});
+
 //connecting the express object to listen on a particular port as defined in the config object.
 app.listen(config.port, config.host, (e) => {
   if (e) {

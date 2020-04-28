@@ -151,7 +151,7 @@ app.get('/sales', (req, res) => {
 });
 
 //GET /users
-app.get('/users', (req, res) => {
+app.get('/users' ,(req, res) => {
   connection.query('SELECT * FROM db.users', function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");

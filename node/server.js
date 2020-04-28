@@ -756,7 +756,7 @@ app.get('/users/department/:dept_id', (req, res) => {
 app.get('/product_types/name/:product_type_name', (req, res) => {
   console.log(req.body);
 
-  connection.query(`SELECT * FROM db.product_types WHERE db.product_types.product_type_name = ?`, [req.params.product_type_name], function (err, rows, fields) {
+  connection.query("SELECT * FROM db.product_types WHERE db.product_types.product_type_name LIKE" + connection.escape('%'+req.params.product_type_name+'%'), function (err, rows, fields) {
     if (err) {
       logger.error("Error while executing query");
       res.status(400).json({
